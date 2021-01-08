@@ -1,0 +1,55 @@
+{% extends 'base-auth.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <div class="card mt-5">
+
+
+          <div class="card-body">
+            <div class="card-title py-3">
+              <h4>Login</h4>
+            </div>
+            <form action="{% url 'login' %}" method="post">
+              {% csrf_token %}
+
+              {% include 'messages.html' %}
+
+              <div class="mb-3">
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="Username"
+                  id="usernameField"
+                  value="{{fieldValues.username}}"
+                  class="form-control form-control-sm">
+              </div>
+              <div class="invalid_feedback invalid-feedback" style="display:none">
+              </div>
+              <div class="mb-3">
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  class="form-control form-control-sm"
+                  id="passwordField">
+              </div>
+              <input style="width: 100%" type="submit" value="Login" class="btn btn-block btn-primary submit-btn" >
+            </form>
+              <p class="loginClass">Don't have an account?
+            <a style="font-weight: bold; font-size: 16px" href="{% url 'register' %}"> Sign Up</a>
+              </p>
+
+          </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+{#    <script src="{% static 'js/register.js' %}"></script>#}
+
+{% endblock content %}

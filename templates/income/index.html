@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="row">
+                <div class="col-md-10 bg-light">
+                    <nav aria-label="breadcrumb">
+                      <ol class="breadcrumb">
+                        <li class="breadcrumb-item" style="font-size: 16px"><a href="{% url 'income' %}">Income</a></li>
+                        <li class="breadcrumb-item active" aria-current="page" style="font-size: 16px">My Income</li>
+                      </ol>
+                    </nav>
+                </div>
+                <div class="col-md-2">
+                    {% if user.currency == '-' %}
+                    <a href="{% url 'userpart' %}" class="btn btn-primary">Add Income</a>
+                    {% else %}
+                    <a href="{% url 'add-income' %}" class="btn btn-primary">Add Income</a>
+                    {% endif %}
+
+                </div>
+        <div style="margin-top: 30px" class="row">
+          <div class="col-md-8"></div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <input style="margin-top: 20px" type="text" class="form-control" id="searchField" placeholder="Search">
+            </div>
+          </div>
+    </div>
+        {% if incomes %}
+            <div class="app-table">
+            <div style="padding-right: 40px" class="container">
+                    <table class="table table-stripped table-hover">
+                  <thead>
+                    <tr style="font-size: 20px">
+                      <th  scope="col">Amount ({{ currency }})</th>
+                      <th scope="col">Source</th>
+                      <th scope="col">Description</th>
+                        <th scope="col">Date</th>
+                        <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for income in page_obj %}
+                    <tr style="font-size: 17px">
+                      <td>{{ income.amount }}</td>
+                      <td>{{ income.source }}</td>
+                      <td>{{ income.description }}</td>
+                        <td>{{ income.date }}</td>
+                        <td><a style="margin-right: 15px" href="{% url 'edit-income' income.pk %}" class="btn btn-secondary btn-sm">Edit</a>
+                        <a href="{% url 'delete-income' income.pk %}" class="btn btn-danger btn-sm">Delete</a></td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+            </div>
+            <p class="no-results">No results </p>
+                <div class="table-output">
+
+                 <div style="padding-right: 40px" class="container">
+                    <table class="table table-stripped table-hover">
+                  <thead>
+                    <tr style="font-size: 20px">
+                      <th  scope="col">Amount ({{ currency }})</th>
+                      <th scope="col">Source</th>
+                      <th scope="col">Description</th>
+                        <th scope="col">Date</th>
+                        <th></th>
+                    </tr>
+                  </thead>
+                    <tbody  class="table-body">
+
+                    </tbody>
+                  </table>
+                </div>
+                </div>
+            <div class="pagination-container">
+              <ul style="padding-left: 890px" class="pagination">
+                  {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a  class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">{{page_obj.previous_page_number}}</a></li>
+                  {% else %}
+                      <li class="page-item disabled">
+                          <span class="page-link">Previous</span>
+                        </li>
+                  {% endif %}
+                <li class="page-item active" aria-current="page">
+                  <span class="page-link">{{ page_obj.number }}</span>
+                </li>
+              {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+                  {% else %}
+                      <li class="page-item disabled">
+                          <span class="page-link">Next</span>
+                        </li>
+                  {% endif %}
+              </ul>
+            </div>
+    {% endif %}
+        </div>
+    </div>
+    {% include 'messages.html' %}
+    <script src="{% static 'js/searchIncome.js' %}">
+    </script>
+{% endblock content %}

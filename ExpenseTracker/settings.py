@@ -14,11 +14,8 @@ from pathlib import Path
 import os
 from django.contrib.messages import constants as messages
 
-
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -30,7 +27,6 @@ SECRET_KEY = 'p%79qt$xqn^)wf#p*6*#vo_!3ccjz673-59v4i^_2(41etk3^p'
 DEBUG = True
 
 ALLOWED_HOSTS = ['django-expense-expenses.herokuapp.com', '127.0.0.1']
-
 
 # Application definition
 
@@ -44,6 +40,7 @@ INSTALLED_APPS = [
     'expenses.apps.TrackerConfig',
     'userpart.apps.UserpartConfig',
     'income.apps.IncomeConfig',
+    'send_email.apps.SendEmailConfig'
 ]
 
 MIDDLEWARE = [
@@ -80,7 +77,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ExpenseTracker.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -93,7 +89,6 @@ DATABASES = {
         'HOST': 'localhost'
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -113,7 +108,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -127,7 +121,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
@@ -137,7 +130,6 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/img')
 MEDIA_URL = '/img/'
 
-
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
@@ -146,8 +138,7 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
 
-
-#SMTP Configuration
+# SMTP Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -155,3 +146,12 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'djangoemailsend@gmail.com'
 EMAIL_HOST_PASSWORD = 'k2869804p'
 
+# REDIS and CELERY Configuration
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = '6379'
+CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
